@@ -3,6 +3,7 @@ import re
 import glob
 import asyncio
 import argparse
+import random
 from itertools import cycle
 
 from pyrogram import Client
@@ -101,14 +102,20 @@ async def process() -> None:
                 break
 
     if action == 1:
-        session_folders = get_session_folders()
-        
-        for folder in session_folders:
-            session_names = get_session_names(folder)
-            tg_clients = await get_tg_clients(folder, session_names)
+        while True: 
+            session_folders = get_session_folders()
             
-            logger.info(f"Running sessions in folder {folder} with {len(session_names)} sessions.")
-            await run_tasks(tg_clients=tg_clients) 
+            for folder in session_folders:
+                session_names = get_session_names(folder)
+                tg_clients = await get_tg_clients(folder, session_names)
+                
+                logger.info(f"Running sessions in folder {folder} with {len(session_names)} sessions.")
+                await run_tasks(tg_clients=tg_clients) 
+
+            # Random sleep time between 3 and 6 hours (10800 to 21600 seconds)
+            sleep_duration = random.randint(10800, 21600)
+            logger.info(f"All sessions completed. Sleeping for {sleep_duration / 3600:.2f} hours before restarting.")
+            await asyncio.sleep(sleep_duration)
 
     elif action == 2:
         await register_sessions()
