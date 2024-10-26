@@ -4,6 +4,8 @@
 
 # 🔥🔥 MUST USE PYTHON 3.10 🔥🔥
 
+(MINOR UPDATE) Added a random delay between each cycle instead of the script exiting upon completion
+
 ## Features  
 The script allows you to farm the **Tonxdao tapper game** by running multiple sessions within a DAO concurrently. You can organize your Telegram sessions into different DAO folders (`dao_1`, `dao_2`, etc.), and the script will run all 5 sessions in each DAO simultaneously. When all sessions in a DAO are tapping together, you achieve **up to 3x the points**, maximizing your rewards while farming. Upon completing the code will move onto the next dao and repeat. In addition to farming, the bot also auto-completes tasks, claims daily rewards, and supports signing up new sessions using referral codes.
 
